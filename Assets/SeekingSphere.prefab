@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4454793109851460}
   - component: {fileID: 114005741279065484}
   - component: {fileID: 212694846381986906}
+  - component: {fileID: 114077022126537950}
   m_Layer: 0
   m_Name: SeekingSphere
   m_TagString: Untagged
@@ -36,7 +37,7 @@ Transform:
   m_GameObject: {fileID: 1639056599900266}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.846003, y: 7.2307634, z: -9.315199}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -54,6 +55,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   y: 0
+--- !u!114 &114077022126537950
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1639056599900266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3f0a7f19affeaa468a08e194c49d16c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212694846381986906
 SpriteRenderer:
   m_ObjectHideFlags: 1

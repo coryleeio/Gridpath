@@ -1,4 +1,5 @@
-﻿using Priority_Queue;
+﻿using Assets.GridPath;
+using Priority_Queue;
 using System;
 using System.Collections.Generic;
 
@@ -12,9 +13,11 @@ namespace GridPath
         private FastPriorityQueue<PathNode> _open = new FastPriorityQueue<PathNode>(_max_open_nodes);
         private List<PathNode> _closed = new List<PathNode>();
 
-        public List<PathNode> FindPath(Point start, Point end, GridGraph grid)
+        public Path FindPath(Point start, Point end, GridGraph grid)
         {
-            var found = false;
+            var path = new Path(); // it would be more efficient to pool this
+            path.Reset(); // have the pool do this on check-in
+
             var parentNode = new PathNode();
             parentNode.G = 0;
             parentNode.H = 2;
@@ -22,6 +25,7 @@ namespace GridPath
             parentNode.X = start.x;
             parentNode.Y = start.y;
             parentNode.parent = null;
+            path.startNode = parentNode;
             _open.Enqueue(parentNode, parentNode.F);
 
             while(_open.Count > 0)
@@ -29,7 +33,7 @@ namespace GridPath
                 parentNode = _open.Dequeue();
                 if (parentNode.X == end.x && parentNode.Y == end.y)
                 {
-                    found = true;
+                    path.found = true;
                     break;
                 }
 
@@ -60,7 +64,6 @@ namespace GridPath
 
                     if (newGValueForPath == parentNode.G)
                     {
-                        // loop
                         continue;
                     }
 
@@ -103,19 +106,18 @@ namespace GridPath
                 }
                 _closed.Add(parentNode);
             }
-            if(found)
+            if(path.found)
             {
-                var list = new List<PathNode>();
-                while(parentNode.parent != null)
+                while (parentNode.parent != null)
                 {
-                    list.Add(parentNode);
+                    path.nodes.Add(parentNode);
                     parentNode = parentNode.parent;
                 }
-                list.Reverse();
-                return list;
+                path.nodes.Reverse();
+                return path;
             }
             _closed.Clear();
-            return _closed;
+            return path;
         }
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 using GridPath;
 using Point = GridPath.Point;
 
+[RequireComponent(typeof(PathFinder))]
 public class TilePopulator : MonoBehaviour
 {
     public Mesh mesh;
@@ -16,6 +17,13 @@ public class TilePopulator : MonoBehaviour
     public int numSeekers;
     private GameObject target;
 
+    void Start()
+    {
+        BuildMap();
+        SpawnTarget();
+        SpawnSeekers();
+    }
+
     public Point FindWalkable()
     {
         var hasFound = false;
@@ -23,13 +31,12 @@ public class TilePopulator : MonoBehaviour
         {
             var x = Random.Range(0, gridSizeX);
             var y = Random.Range(0, gridSizeY);
-
-           // GridNode node = gg.nodes[y * gg.width + x];
-           // if (node.Walkable)
-           // {
-              //  hasFound = true;
+            var node = PathFinder.Instance.Grid.NodeAt(x, y);
+            if (node.walkable)
+            {
+                hasFound = true;
                 return new Point(x, y);
-          //  }
+            }
         }
         return null;
     }
@@ -50,6 +57,8 @@ public class TilePopulator : MonoBehaviour
             var isoPosition = IsoUtil.ToFloor(IsoUtil.CartesianToIso(point.x, point.y));
             var go = Instantiate(seekerPrefab, isoPosition, Quaternion.identity);
             setIsoPosition(go, point.x,point.y);
+            var seekAI = go.GetComponent<SeekAI>();
+            seekAI.Seek(target.transform);
         }
     }
 
@@ -60,8 +69,9 @@ public class TilePopulator : MonoBehaviour
         iso.y = y;
     }
 
-    void Start()
+    private void BuildMap()
     {
+        var pathFinder = PathFinder.Instance;
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeY; y++)
@@ -70,21 +80,20 @@ public class TilePopulator : MonoBehaviour
                 if (Random.Range(0, 5) == 4)
                 {
                     var go = GameObject.Instantiate(collidableTile, drawLocation, Quaternion.identity);
-                    setIsoPosition(go,x ,y);
+                    setIsoPosition(go, x, y);
+                    pathFinder.Grid.SetWalkable(x, y, false);
                 }
                 else if ((x % 2 == 0 && y % 2 == 0) || x % 2 == 1 && y % 2 == 1)
                 {
                     var go = GameObject.Instantiate(tile2, drawLocation, Quaternion.identity);
-                    setIsoPosition(go,x, y);
+                    setIsoPosition(go, x, y);
                 }
                 else
                 {
                     var go = GameObject.Instantiate(tile1, drawLocation, Quaternion.identity);
-                    setIsoPosition(go,x,y);
+                    setIsoPosition(go, x, y);
                 }
             }
         }
-        SpawnTarget();
-        SpawnSeekers();
     }
 }
