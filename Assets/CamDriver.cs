@@ -22,6 +22,7 @@ namespace Assets.Game.Scenes
             _newXCoordinate = transform.position.x;
             _newYCoordinate = transform.position.y;
             _newZCoordinate = transform.position.z;
+
             if (Input.mouseScrollDelta.y < 0.0f)
             {
                 _newZCoordinate -= ZoomRate;

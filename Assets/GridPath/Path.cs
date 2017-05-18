@@ -1,23 +1,24 @@
 ﻿using GridPath;
+using System;
 using System.Collections.Generic;
 
 namespace Assets.GridPath
 {
     public class Path
     {
-        public PathNode startNode;
-        public List<PathNode> nodes;
-        public bool found;
+        public PathNode StartNode;
+        public List<PathNode> Nodes;
+        public bool Found;
 
         public void Reset()
         {
-            startNode = null;
-            found = false;
-            if(nodes == null)
+            StartNode = null;
+            Found = false;
+            if(Nodes == null)
             {
-                nodes = new List<PathNode>();
+                Nodes = new List<PathNode>();
             }
-            nodes.Clear();
+            Nodes.Clear();
         }
     }
 }

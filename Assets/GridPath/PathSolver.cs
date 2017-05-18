@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GridPath
 {
-    public class PathSolver
+    public class PathSolver : IPathSolver
     {
         private static readonly int _max_open_nodes = 2000;
         private static readonly int _orthogonal_weight = 10;
@@ -13,8 +13,10 @@ namespace GridPath
         private FastPriorityQueue<PathNode> _open = new FastPriorityQueue<PathNode>(_max_open_nodes);
         private List<PathNode> _closed = new List<PathNode>();
 
-        public Path FindPath(Point start, Point end, GridGraph grid)
+        public Path FindPath(int startX, int startY, int endX, int endY, GridGraph grid)
         {
+            _open.Clear();
+            _closed.Clear();
             var path = new Path(); // it would be more efficient to pool this
             path.Reset(); // have the pool do this on check-in
 
@@ -22,18 +24,18 @@ namespace GridPath
             parentNode.G = 0;
             parentNode.H = 2;
             parentNode.F = parentNode.G + parentNode.H;
-            parentNode.X = start.x;
-            parentNode.Y = start.y;
+            parentNode.X = startX;
+            parentNode.Y = startY;
             parentNode.parent = null;
-            path.startNode = parentNode;
+            path.StartNode = parentNode;
             _open.Enqueue(parentNode, parentNode.F);
 
             while(_open.Count > 0)
             {
                 parentNode = _open.Dequeue();
-                if (parentNode.X == end.x && parentNode.Y == end.y)
+                if (parentNode.X == endX && parentNode.Y == endY)
                 {
-                    path.found = true;
+                    path.Found = true;
                     break;
                 }
 
@@ -99,21 +101,22 @@ namespace GridPath
 
                     newNode.parent = parentNode;
                     newNode.G = newGValueForPath;
-                    newNode.H = 2 * (Math.Abs(newNode.X - end.x) + Math.Abs(newNode.Y - end.y));
+                    newNode.H = 2 * (Math.Abs(newNode.X - endX) + Math.Abs(newNode.Y - endY));
                     newNode.F = newNode.G + newNode.H;
 
                     _open.Enqueue(newNode, newNode.F);
                 }
                 _closed.Add(parentNode);
             }
-            if(path.found)
+
+            if(path.Found)
             {
                 while (parentNode.parent != null)
                 {
-                    path.nodes.Add(parentNode);
+                    path.Nodes.Add(parentNode);
                     parentNode = parentNode.parent;
                 }
-                path.nodes.Reverse();
+                path.Nodes.Reverse();
                 return path;
             }
             _closed.Clear();

@@ -24,10 +24,10 @@ public class SeekAI : MonoBehaviour
     {
         while(true)
         {
-            if(_path != null && pathIndex < _path.nodes.Count)
+            if(_path != null && pathIndex < _path.Nodes.Count)
             {
-                var nextNode = _path.nodes[pathIndex];
-                transform.position = IsoUtil.ToFloor(IsoUtil.CartesianToIso(nextNode.X, nextNode.Y));
+                var nextNode = _path.Nodes[pathIndex];
+                transform.position = IsoUtil.CartesianToIso(nextNode.X, nextNode.Y, IsoUtil.IsoType.FLOOR);
                 pathIndex++;
             }
             yield return new WaitForSeconds(1f);

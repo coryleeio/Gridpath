@@ -7,12 +7,18 @@ namespace Assets
         private static float tileSizeInUnitsX = 1.0f;
         private static float tileSizeInUnitsY = 0.5f;
 
-        public static Vector3 CartesianToIso(int x, int y)
+        public enum IsoType
         {
-            return CartesianToIso(x * 1.0f, y * 1.0f);
+            FLOOR,
+            TILE
         }
 
-        public static Vector3 CartesianToIso(float x, float y)
+        public static Vector3 CartesianToIso(int x, int y, IsoType mode)
+        {
+            return CartesianToIso(x * 1.0f, y * 1.0f, mode);
+        }
+
+        public static Vector3 CartesianToIso(float x, float y, IsoType mode)
         {
             var newX = (x - y) * 0.5f;
             var newY = (-x - y) * 0.25f;
@@ -22,13 +28,13 @@ namespace Assets
             newX += y * 0.02f;
             newY += y * 0.01f;
 
+            if(mode == IsoType.FLOOR)
+            {
+                newY -= 0.15f;
+            }
+
             var newZ = CalculateIsoZBasedOnPosition(newX, newY);
             return new Vector3(newX, newY, newZ);
-        }
-
-        public static Vector3 ToFloor(Vector3 pos)
-        {
-            return new Vector3(pos.x, pos.y - 0.15f, pos.z);
         }
 
         public static Vector3 IsoSnapToGridPosition(Vector3 position)
@@ -40,8 +46,14 @@ namespace Assets
             // Calculate grid aligned position from current position
             float x = (ratioY - ratioX) * 0.5f * tileSizeInUnitsX;
             float y = (ratioY + ratioX) * 0.5f * tileSizeInUnitsY;
+            var newX = x;
+            var newY = y;
+            newX += x * -0.02f;
+            newY += x * 0.01f;
+            newX += y * 0.02f;
+            newY += y * 0.01f;
 
-            return new Vector3(x, y, CalculateIsoZBasedOnPosition(x, y));
+            return new Vector3(newX, newY, CalculateIsoZBasedOnPosition(newX, newY));
         }
 
         public static float CalculateIsoZBasedOnPosition(float x, float y)
