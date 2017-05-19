@@ -1,8 +1,6 @@
-﻿using GridPath;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Assets.GridPath
+namespace GridPath
 {
     public class Path
     {

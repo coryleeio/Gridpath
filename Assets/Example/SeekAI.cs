@@ -8,7 +8,7 @@ using UnityEngine;
 public class SeekAI : MonoBehaviour
 {
     private Path _path;
-    private int pathIndex = 0;
+    private int _pathIndex = 0;
 
     public void Seek(Transform newTarget)
     {
@@ -16,7 +16,7 @@ public class SeekAI : MonoBehaviour
         if (newTarget != null)
         {
             var targetIso = newTarget.GetComponent<IsoObj>();
-            PathFinder.Instance.StartPath(myIso.x, myIso.y, targetIso.x, targetIso.y, OnPathComplete);
+            PathFinder.Instance.StartPath(myIso.X, myIso.Y, targetIso.X, targetIso.Y, OnPathComplete);
         }
     }
 
@@ -24,11 +24,11 @@ public class SeekAI : MonoBehaviour
     {
         while(true)
         {
-            if(_path != null && pathIndex < _path.Nodes.Count)
+            if(_path != null && _pathIndex < _path.Nodes.Count)
             {
-                var nextNode = _path.Nodes[pathIndex];
+                var nextNode = _path.Nodes[_pathIndex];
                 transform.position = IsoUtil.CartesianToIso(nextNode.X, nextNode.Y, IsoUtil.IsoType.FLOOR);
-                pathIndex++;
+                _pathIndex++;
             }
             yield return new WaitForSeconds(1f);
         }
@@ -43,6 +43,6 @@ public class SeekAI : MonoBehaviour
     {
         Debug.Log("Received path!");
         _path = p;
-        pathIndex = 0;
+        _pathIndex = 0;
     }
 }

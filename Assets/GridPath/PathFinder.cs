@@ -1,10 +1,10 @@
-﻿using Assets.GridPath;
-using Assets.Game;
+﻿using Assets.Game;
 using UnityEngine;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System;
+using GridPath.DotNetConcurrency;
 
 namespace GridPath
 {
@@ -145,7 +145,7 @@ namespace GridPath
         }
         private void DrawX(float x, float y)
         {
-            Gizmos.color = Color.grey;
+            Gizmos.color = Color.blue;
             Gizmos.DrawLine(FlipForDrawing(x - 0.5f, y + 0.5f), FlipForDrawing(x + 0.5f, y - 0.5f));
             Gizmos.DrawLine(FlipForDrawing(x + 0.5f, y + 0.5f), FlipForDrawing(x - 0.5f, y - 0.5f));
         }

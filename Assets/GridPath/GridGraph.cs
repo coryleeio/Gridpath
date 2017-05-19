@@ -5,7 +5,6 @@ namespace GridPath
     public class GridGraph
     {
         private GraphNode[,] _grid;
-        private List<Point> _neighborOffsets = new List<Point>();
 
         private bool _allowDiagnals = true;
         public bool AllowDiagnals
@@ -17,7 +16,7 @@ namespace GridPath
             set
             {
                 _allowDiagnals = value;
-                recalculateNeighborOffsets();
+                CalculateAllNeighbors(SizeX, SizeY);
             }
         }
 
@@ -31,7 +30,7 @@ namespace GridPath
             set
             {
                 _allowCutCorners = value;
-                recalculateNeighborOffsets();
+                CalculateAllNeighbors(SizeX, SizeY);
             }
         }
 
@@ -67,30 +66,6 @@ namespace GridPath
             }
         }
 
-        private void recalculateNeighborOffsets()
-        {
-            _neighborOffsets.Clear();
-            if (AllowDiagnals)
-            {
-                _neighborOffsets.Add(new Point(0, 1));
-                _neighborOffsets.Add(new Point(1, 0));
-                _neighborOffsets.Add(new Point(0, -1));
-                _neighborOffsets.Add(new Point(-1, 0));
-
-                _neighborOffsets.Add(new Point(1, 1));
-                _neighborOffsets.Add(new Point(1, -1));
-                _neighborOffsets.Add(new Point(-1, 1));
-                _neighborOffsets.Add(new Point(-1, -1));
-            }
-            else
-            {
-                _neighborOffsets.Add(new Point(0, 1));
-                _neighborOffsets.Add(new Point(1, 0));
-                _neighborOffsets.Add(new Point(0, -1));
-                _neighborOffsets.Add(new Point(-1, 0));
-            }
-        }
-
         private GridGraph()
         {
 
@@ -99,18 +74,23 @@ namespace GridPath
         public GridGraph(int sizeX, int sizeY)
         {
             _grid = new GraphNode[sizeX, sizeY];
+            var numNeighbors = 4;
+            if(_allowDiagnals)
+            {
+                numNeighbors = 8;
+            }
             for(var x = 0; x < sizeX; x++)
             {
                 for (var y = 0; y < sizeY; y++)
                 {
-                    _grid[x, y] = new GraphNode()
+                    _grid[x, y] = new GraphNode(numNeighbors)
                     {
                         X = x,
                         Y = y
                     };
                 }
             }
-            recalculateNeighborOffsets();
+            CalculateAllNeighbors(sizeX, sizeY);
         }
 
         public GraphNode NodeAt(int x, int y)
@@ -125,17 +105,48 @@ namespace GridPath
 
         public List<GraphNode> Neighbors(int x, int y)
         {
-            var neighbors = new List<GraphNode>();
-            foreach(var offset in _neighborOffsets)
+            return NodeAt(x, y).neighbors;
+        }
+
+        private void CalculateAllNeighbors(int sizeX, int sizeY)
+        {
+            var neighborOffsets = new List<Point>();
+            if (AllowDiagnals)
             {
-                var neighborX = x + offset.x;
-                var neighborY = y + offset.y;
-                if (NodeInGrid(neighborX, neighborY))
+                neighborOffsets.Add(new Point(0, 1));
+                neighborOffsets.Add(new Point(1, 0));
+                neighborOffsets.Add(new Point(0, -1));
+                neighborOffsets.Add(new Point(-1, 0));
+
+                neighborOffsets.Add(new Point(1, 1));
+                neighborOffsets.Add(new Point(1, -1));
+                neighborOffsets.Add(new Point(-1, 1));
+                neighborOffsets.Add(new Point(-1, -1));
+            }
+            else
+            {
+                neighborOffsets.Add(new Point(0, 1));
+                neighborOffsets.Add(new Point(1, 0));
+                neighborOffsets.Add(new Point(0, -1));
+                neighborOffsets.Add(new Point(-1, 0));
+            }
+
+            for (var x = 0; x < sizeX; x++)
+            {
+                for (var y = 0; y < sizeY; y++)
                 {
-                    neighbors.Add(NodeAt(neighborX, neighborY));
+                    NodeAt(x, y).neighbors.Clear();
+                    foreach (var offset in neighborOffsets)
+                    {
+                        var neighborX = x + offset.x;
+                        var neighborY = y + offset.y;
+                        if (NodeInGrid(neighborX, neighborY))
+                        {
+                            NodeAt(x, y).neighbors.Add(NodeAt(neighborX, neighborY));
+                        }
+                    }
                 }
             }
-            return neighbors;
         }
 
         public void SetWalkable(int x, int y, bool walkable)

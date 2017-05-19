@@ -1,6 +1,4 @@
-﻿using GridPath;
-
-namespace Assets.GridPath
+﻿namespace GridPath
 {
     interface IPathSolver
     {

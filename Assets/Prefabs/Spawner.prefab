@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4830043129697042}
   - component: {fileID: 108112011595645904}
   - component: {fileID: 114794684402448440}
+  - component: {fileID: 114329575852162104}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -75,6 +76,18 @@ Light:
   m_BounceIntensity: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114329575852162104
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1297250504585696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e46b103bf66787f45b03744fc4fd2ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowGraph: 1
 --- !u!114 &114794684402448440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -86,15 +99,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c68d854ce1f2194abc5ee14a688ea07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  tile1: {fileID: 1309609484515632, guid: 65b174f4efd450f41beb5713fbae9f4f, type: 2}
-  tile2: {fileID: 1309609484515632, guid: 65b174f4efd450f41beb5713fbae9f4f, type: 2}
-  collidableTile: {fileID: 1080349644396298, guid: deba98ca29aadb94b8fe8250a5f76cbd,
+  Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  FloorTile1: {fileID: 1189396434177744, guid: 2be6c287a4b268047a46ba03ce55129e, type: 2}
+  FloorTile2: {fileID: 1337699412069888, guid: bd9e1722976a1d441b1c75cfbe643e40, type: 2}
+  CollidableTile1: {fileID: 1315587931281370, guid: 31422479875c8cb4caef643cc6e6483c,
     type: 2}
-  seekerPrefab: {fileID: 1639056599900266, guid: 3a5565f02c3851542b8efc7238110101,
+  SeekerPrefab: {fileID: 1639056599900266, guid: 3a5565f02c3851542b8efc7238110101,
     type: 2}
-  targetPrefab: {fileID: 1314881867981382, guid: 4c0b3ce0adffa8541a960046fe348253,
+  TargetPrefab: {fileID: 1314881867981382, guid: 4c0b3ce0adffa8541a960046fe348253,
     type: 2}
-  gridSizeX: 4
-  gridSizeY: 4
-  numSeekers: 1
+  GridSizeX: 50
+  GridSizeY: 50
+  NumberOfSeekers: 10
+  Seed: 1

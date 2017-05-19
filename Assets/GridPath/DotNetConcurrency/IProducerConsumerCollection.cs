@@ -25,7 +25,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GridPath
+namespace GridPath.DotNetConcurrency
 {
 	public interface IProducerConsumerCollection<T> : IEnumerable<T>, ICollection, IEnumerable
 	{

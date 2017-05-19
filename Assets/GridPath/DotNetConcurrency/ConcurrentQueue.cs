@@ -27,7 +27,7 @@ using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GridPath
+namespace GridPath.DotNetConcurrency
 {
 
 	public class ConcurrentQueue<T> : IProducerConsumerCollection<T>, IEnumerable<T>, ICollection,

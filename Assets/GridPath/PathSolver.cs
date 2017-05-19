@@ -1,5 +1,4 @@
-﻿using Assets.GridPath;
-using Priority_Queue;
+﻿using Priority_Queue;
 using System;
 using System.Collections.Generic;
 
@@ -17,8 +16,8 @@ namespace GridPath
         {
             _open.Clear();
             _closed.Clear();
-            var path = new Path(); // it would be more efficient to pool this
-            path.Reset(); // have the pool do this on check-in
+            var path = new Path();
+            path.Reset();
 
             var parentNode = new PathNode();
             parentNode.G = 0;
@@ -101,7 +100,7 @@ namespace GridPath
 
                     newNode.parent = parentNode;
                     newNode.G = newGValueForPath;
-                    newNode.H = 2 * (Math.Abs(newNode.X - endX) + Math.Abs(newNode.Y - endY));
+                    newNode.H = (int)(2 * (Math.Pow((newNode.X - endX), 2) + Math.Pow((newNode.Y - endY), 2)));
                     newNode.F = newNode.G + newNode.H;
 
                     _open.Enqueue(newNode, newNode.F);

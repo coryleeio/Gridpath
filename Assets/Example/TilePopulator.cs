@@ -67,8 +67,8 @@ public class TilePopulator : MonoBehaviour
     public void setIsoPosition(GameObject ob, int x, int y)
     {
         var iso = ob.GetComponent<IsoObj>();
-        iso.x = x;
-        iso.y = y;
+        iso.X = x;
+        iso.Y = y;
     }
 
     private void BuildMap()

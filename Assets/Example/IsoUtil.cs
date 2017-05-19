@@ -4,8 +4,8 @@ namespace Assets
 {
     public static class IsoUtil
     {
-        private static float tileSizeInUnitsX = 1.0f;
-        private static float tileSizeInUnitsY = 0.5f;
+        private static float _tileSizeInUnitsX = 1.0f;
+        private static float _tileSizeInUnitsY = 0.5f;
 
         public enum IsoType
         {
@@ -40,12 +40,12 @@ namespace Assets
         public static Vector3 IsoSnapToGridPosition(Vector3 position)
         {
             // Calculate ratios for simple grid snap
-            float ratioX = Mathf.Round(position.y / tileSizeInUnitsY - position.x / tileSizeInUnitsX);
-            float ratioY = Mathf.Round(position.y / tileSizeInUnitsY + position.x / tileSizeInUnitsX);
+            float ratioX = Mathf.Round(position.y / _tileSizeInUnitsY - position.x / _tileSizeInUnitsX);
+            float ratioY = Mathf.Round(position.y / _tileSizeInUnitsY + position.x / _tileSizeInUnitsX);
 
             // Calculate grid aligned position from current position
-            float x = (ratioY - ratioX) * 0.5f * tileSizeInUnitsX;
-            float y = (ratioY + ratioX) * 0.5f * tileSizeInUnitsY;
+            float x = (ratioY - ratioX) * 0.5f * _tileSizeInUnitsX;
+            float y = (ratioY + ratioX) * 0.5f * _tileSizeInUnitsY;
             var newX = x;
             var newY = y;
             newX += x * -0.02f;
