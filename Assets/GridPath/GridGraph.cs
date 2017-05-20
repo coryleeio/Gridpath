@@ -6,32 +6,18 @@ namespace GridPath
     {
         private GraphNode[,] _grid;
 
-        private bool _allowDiagnals = true;
-        public bool AllowDiagnals
+
+        public enum DiagonalOptions
         {
-            get
-            {
-                return _allowDiagnals;
-            }
-            set
-            {
-                _allowDiagnals = value;
-                CalculateAllNeighbors(SizeX, SizeY);
-            }
+            DiagonalsWithoutCornerCutting,
+            NoDiagonals,
+            DiagonalsWithCornerCutting
         }
 
-        private bool _allowCutCorners = false;
-        public bool AllowCutCorners
-        {
-            get
-            {
-                return _allowCutCorners;
-            }
-            set
-            {
-                _allowCutCorners = value;
-            }
-        }
+        public DiagonalOptions DiagonalSetting;
+        public List<Point> DiagonalOffsets = new List<Point>();
+        public List<Point> OrthogonalOffsets = new List<Point>();
+        public List<Point> NeighborOffsets = new List<Point>();
 
         public int MaxX
         {
@@ -70,13 +56,22 @@ namespace GridPath
 
         }
 
-        public GridGraph(int sizeX, int sizeY)
+        public GridGraph(int sizeX, int sizeY, DiagonalOptions diagonalSetting)
         {
             _grid = new GraphNode[sizeX, sizeY];
+            DiagonalSetting = diagonalSetting;
             var numNeighbors = 4;
-            if(_allowDiagnals)
+            if (DiagonalSetting == DiagonalOptions.DiagonalsWithCornerCutting || DiagonalSetting == DiagonalOptions.DiagonalsWithoutCornerCutting)
             {
                 numNeighbors = 8;
+            }
+            else if(DiagonalSetting == DiagonalOptions.NoDiagonals)
+            {
+                numNeighbors = 4;
+            }
+            else
+            {
+                throw new System.Exception("Not implemented");
             }
             for(var x = 0; x < sizeX; x++)
             {
@@ -109,25 +104,42 @@ namespace GridPath
 
         private void CalculateAllNeighbors(int sizeX, int sizeY)
         {
-            var neighborOffsets = new List<Point>();
-            if (AllowDiagnals)
-            {
-                neighborOffsets.Add(new Point(0, 1));
-                neighborOffsets.Add(new Point(1, 0));
-                neighborOffsets.Add(new Point(0, -1));
-                neighborOffsets.Add(new Point(-1, 0));
+            OrthogonalOffsets.Clear();
+            DiagonalOffsets.Clear();
+            NeighborOffsets.Clear();
 
-                neighborOffsets.Add(new Point(1, 1));
-                neighborOffsets.Add(new Point(1, -1));
-                neighborOffsets.Add(new Point(-1, 1));
-                neighborOffsets.Add(new Point(-1, -1));
+            var up = new Point(1, 0);
+            var down = new Point(0, -1);
+            var left = new Point(-1, 0);
+            var right = new Point(0, 1);
+
+            OrthogonalOffsets.Add(up);
+            OrthogonalOffsets.Add(down);
+            OrthogonalOffsets.Add(left);
+            OrthogonalOffsets.Add(right);
+            NeighborOffsets.Add(up);
+            NeighborOffsets.Add(down);
+            NeighborOffsets.Add(left);
+            NeighborOffsets.Add(right);
+
+            if (DiagonalSetting == DiagonalOptions.DiagonalsWithCornerCutting || DiagonalSetting == DiagonalOptions.DiagonalsWithoutCornerCutting)
+            {
+                var upRight = new Point(1, 1);
+                var upLeft = new Point(-1, 1);
+                var downLeft = new Point(-1, -1);
+                var downRight = new Point(1, -1);
+                DiagonalOffsets.Add(upRight);
+                DiagonalOffsets.Add(upLeft);
+                DiagonalOffsets.Add(downLeft);
+                DiagonalOffsets.Add(downRight);
+                NeighborOffsets.Add(upRight);
+                NeighborOffsets.Add(upLeft);
+                NeighborOffsets.Add(downLeft);
+                NeighborOffsets.Add(downRight);
             }
             else
             {
-                neighborOffsets.Add(new Point(0, 1));
-                neighborOffsets.Add(new Point(1, 0));
-                neighborOffsets.Add(new Point(0, -1));
-                neighborOffsets.Add(new Point(-1, 0));
+                throw new System.Exception("Not implemented");
             }
 
             for (var x = 0; x < sizeX; x++)
@@ -135,7 +147,7 @@ namespace GridPath
                 for (var y = 0; y < sizeY; y++)
                 {
                     NodeAt(x, y).Neighbors.Clear();
-                    foreach (var offset in neighborOffsets)
+                    foreach (var offset in NeighborOffsets)
                     {
                         var neighborX = x + offset.x;
                         var neighborY = y + offset.y;

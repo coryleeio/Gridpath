@@ -13,25 +13,25 @@ namespace GridPath
     {
         public enum LogLevel
         {
-            DEBUG,
-            OFF
+            On,
+            Off
         }
 
         public enum GizmoLevel
         {
-            SHOW_GRID,
-            OFF
+            ShowGrid,
+            Off
         }
 
         private bool _threadsRunning;
         private List<Thread> _threads = new List<Thread>();
         public LogLevel PathLogging;
         public GizmoLevel DebugMode;
-        public int NumberOfThreads;
-        private int _numberOfPathsToDrawInDebug = 50;
+
+        private int _numberOfPathsToDrawInDebug = 5;
         private ConcurrentQueue<PathRequest> _incompletePaths = new ConcurrentQueue<PathRequest>();
         private ConcurrentQueue<PathRequest> _completePaths = new ConcurrentQueue<PathRequest>();
-        private Stack<PathRequest> _previouslyCompletedPaths = new Stack<PathRequest>();
+        private Queue<PathRequest> _previouslyCompletedPaths = new Queue<PathRequest>();
 
         private GridGraph _grid;
         public GridGraph Grid
@@ -48,7 +48,7 @@ namespace GridPath
 
         private void Log(String log)
         {
-            if (PathLogging == LogLevel.DEBUG)
+            if (PathLogging == LogLevel.On)
             {
                 Debug.Log(log);
             }
@@ -56,26 +56,12 @@ namespace GridPath
 
         private void LogCompletedRequest(PathRequest request)
         {
-            if(PathLogging == LogLevel.DEBUG)
+            if (PathLogging == LogLevel.On)
             {
                 var min = request.TimeToFind.Minutes;
                 var sec = request.TimeToFind.Seconds;
                 var milli = request.TimeToFind.Milliseconds;
-                Debug.Log(string.Format("Completed path {0},{1} -> {2},{3} in: {4}m:{5}s.{6}", request.StartX, request.StartY, request.EndX, request.EndY, min, sec, milli));
-            }
-        }
-
-        void Start()
-        {
-            if (NumberOfThreads == 0)
-            {
-                Debug.LogWarning("Number of threads for pathfinder set to 1, as it does not support running in the main thread.");
-                NumberOfThreads = 1; // Must spawn atleast one.
-            }
-            _threads.Add(new Thread(PathingWorker));
-            foreach (var thread in _threads)
-            {
-                thread.Start();
+                Debug.Log(string.Format("Thread {0} Completed path {1},{2} -> {3},{4} in: {5}m:{6}s.{7}", request.ThreadId, request.StartX, request.StartY, request.EndX, request.EndY, min, sec, milli));
             }
         }
 
@@ -90,16 +76,16 @@ namespace GridPath
                 {
                     LogCompletedRequest(completedRequest);
                     completedRequest.Handler(completedRequest.Path);
-                    if(_previouslyCompletedPaths.Count > _numberOfPathsToDrawInDebug)
+                    if (_previouslyCompletedPaths.Count > _numberOfPathsToDrawInDebug)
                     {
-                        _previouslyCompletedPaths.Pop();
+                        _previouslyCompletedPaths.Dequeue();
                     }
-                    _previouslyCompletedPaths.Push(completedRequest);
+                    _previouslyCompletedPaths.Enqueue(completedRequest);
                 }
             }
         }
 
-        void PathingWorker()
+        private void PathingWorker()
         {
             PathSolver solver = new PathSolver();
             Stopwatch watch = new Stopwatch();
@@ -118,6 +104,7 @@ namespace GridPath
                     incompletePath.Path = solver.FindPath(incompletePath.StartX, incompletePath.StartY, incompletePath.EndX, incompletePath.EndY, Grid);
                     watch.Stop();
                     incompletePath.TimeToFind = watch.Elapsed;
+                    incompletePath.ThreadId = Thread.CurrentThread.ManagedThreadId;
                     _completePaths.Enqueue(incompletePath);
                 }
             }
@@ -144,9 +131,26 @@ namespace GridPath
             // Thread is guaranteed no longer running. 
         }
 
-        public void BuildGrid(int gridSizeX, int gridSizeY)
+        public void Init(int gridSizeX, int gridSizeY, GridGraph.DiagonalOptions diagonalSetting, int numberOfThreads)
         {
-            Grid = new GridGraph(gridSizeX, gridSizeY);
+            Grid = new GridGraph(gridSizeX, gridSizeY, diagonalSetting);
+            if (numberOfThreads < 1)
+            {
+                Debug.LogError("Pathfinding will not work without atleast one thread!");
+            }
+            else
+            {
+                Log("Started with " + numberOfThreads + " threads.");
+                for (var i = 0; i < numberOfThreads; i++)
+                {
+                    _threads.Add(new Thread(PathingWorker));
+                }
+
+                foreach (var thread in _threads)
+                {
+                    thread.Start();
+                }
+            }
         }
 
         private Vector3 FlipForDrawing(float x, float y)
@@ -187,7 +191,7 @@ namespace GridPath
 
         void OnDrawGizmos()
         {
-            if (Grid != null && DebugMode == GizmoLevel.SHOW_GRID)
+            if (Grid != null && DebugMode == GizmoLevel.ShowGrid)
             {
                 var sizeX = Grid.SizeX;
                 var sizeY = Grid.SizeY;
@@ -239,6 +243,7 @@ namespace GridPath
             public int StartY;
             public int EndX;
             public int EndY;
+            public int ThreadId;
             public Path Path = null;
             public OnPathComplete Handler;
             public TimeSpan TimeToFind;

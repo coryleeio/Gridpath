@@ -87,9 +87,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e46b103bf66787f45b03744fc4fd2ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PathLogging: 0
+  PathLogging: 1
   DebugMode: 0
-  NumberOfThreads: 4
 --- !u!114 &114794684402448440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -110,7 +109,8 @@ MonoBehaviour:
     type: 2}
   TargetPrefab: {fileID: 1314881867981382, guid: 4c0b3ce0adffa8541a960046fe348253,
     type: 2}
-  GridSizeX: 100
-  GridSizeY: 100
-  NumberOfSeekers: 50
+  GridSizeX: 50
+  GridSizeY: 50
+  NumberOfSeekers: 20
+  Diagonals: 0
   Seed: 42

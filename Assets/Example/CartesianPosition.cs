@@ -18,6 +18,7 @@ public class CartesianPosition : MonoBehaviour {
             UpdateDrawPosition(X, Y);
         }
     }
+
     private int _y;
     public int Y
     {

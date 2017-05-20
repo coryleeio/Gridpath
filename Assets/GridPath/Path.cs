@@ -6,6 +6,14 @@ namespace GridPath
     {
         public PathNode StartNode;
         public List<PathNode> Nodes;
+        public List<string> Errors = new List<string>();
+        public bool HasErrors
+        {
+            get
+            {
+                return Errors.Count > 0;
+            }
+        }
         public bool Found;
 
         public void Reset()
@@ -16,6 +24,7 @@ namespace GridPath
             {
                 Nodes = new List<PathNode>();
             }
+            Errors.Clear();
             Nodes.Clear();
         }
     }

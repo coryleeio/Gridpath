@@ -47,15 +47,27 @@ public class SeekAI : MonoBehaviour
 
     void Start()
     {
-        _repathRate = 4.0f + Random.Range(0.0f, 1.0f);
+        _repathRate = Random.Range(0.0f, 1.5f) + 0.3f;
         StartCoroutine(Move());
         StartCoroutine(Repath());
     }
 
     public void OnPathComplete(Path p)
     {
-        Debug.Log("Received path!");
-        _path = p;
-        _pathIndex = 0;
+        foreach(var error in p.Errors)
+        {
+            Debug.LogWarning("The path had the error: " + error);
+        }
+
+        if(p.Found)
+        {
+            Debug.Log("Received path!");
+            _path = p;
+            _pathIndex = 0;
+        }
+        else
+        {
+            Debug.LogWarning("No path to that exists...");
+        }
     }
 }

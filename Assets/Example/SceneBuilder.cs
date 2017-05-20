@@ -4,7 +4,7 @@ using GridPath;
 using Point = GridPath.Point;
 
 [RequireComponent(typeof(PathFinder))]
-public class TilePopulator : MonoBehaviour
+public class SceneBuilder : MonoBehaviour
 {
     public Mesh Mesh;
     public GameObject LightTile;
@@ -15,11 +15,15 @@ public class TilePopulator : MonoBehaviour
     public int GridSizeX;
     public int GridSizeY;
     public int NumberOfSeekers;
+    public GridGraph.DiagonalOptions Diagonals;
     public int Seed;
     private GameObject Target;
+    private GameObject MapFolder;
 
     void Start()
     {
+        MapFolder = new GameObject();
+        MapFolder.name = "Map";
         Random.InitState(Seed);
         BuildMap();
         SpawnTarget();
@@ -71,10 +75,15 @@ public class TilePopulator : MonoBehaviour
         pos.Y = y;
     }
 
+    private void AddToMapFolder(GameObject go)
+    {
+        go.transform.parent = MapFolder.transform;
+    }
+
     private void BuildMap()
     {
         var pathFinder = PathFinder.Instance;
-        pathFinder.BuildGrid(GridSizeX, GridSizeY);
+        pathFinder.Init(GridSizeX, GridSizeY, GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting, 4);
         for (int x = 0; x < GridSizeX; x++)
         {
             for (int y = 0; y < GridSizeY; y++)
@@ -85,16 +94,19 @@ public class TilePopulator : MonoBehaviour
                     var go = GameObject.Instantiate(CollidableTile, drawLocation, Quaternion.identity);
                     SetCartesianPosition(go, x, y);
                     pathFinder.Grid.SetWalkable(x, y, false);
+                    AddToMapFolder(go);
                 }
                 else if ((x % 2 == 0 && y % 2 == 0) || x % 2 == 1 && y % 2 == 1)
                 {
                     var go = GameObject.Instantiate(DarkTile, drawLocation, Quaternion.identity);
                     SetCartesianPosition(go, x, y);
+                    AddToMapFolder(go);
                 }
                 else
                 {
                     var go = GameObject.Instantiate(LightTile, drawLocation, Quaternion.identity);
                     SetCartesianPosition(go, x, y);
+                    AddToMapFolder(go);
                 }
             }
         }

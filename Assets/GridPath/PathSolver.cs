@@ -7,6 +7,7 @@ namespace GridPath
 {
     public class PathSolver
     {
+        private static readonly int _searchLimit = 2000;
         private static readonly int _max_open_nodes = 2000;
         private static readonly int _orthogonal_weight = 10;  // 1 * 10          orthogonal weight multiplied by 10 to remain an int
         private static readonly int _diagonal_weight = 14;    // sqrt(2) * 10    diagonal weight multiplied by 10 to remain an int
@@ -19,6 +20,18 @@ namespace GridPath
             _closed.Clear();
             var path = new Path();
             path.Reset();
+
+            if (!grid.NodeInGrid(startX, startY) || !grid.NodeInGrid(endX, endY))
+            {
+                path.Errors.Add("Start or endpoint were not in the grid");
+                return path;
+            }
+
+            if (!grid.NodeAt(startX, startY).Walkable || !grid.NodeAt(endX, endY).Walkable)
+            {
+                path.Errors.Add("Start or endpoint were not walkable");
+                return path;
+            }
 
             var parentNode = new PathNode();
             parentNode.G = 0;
@@ -39,6 +52,12 @@ namespace GridPath
                     break;
                 }
 
+                if(_closed.Count > _searchLimit)
+                {
+                    path.Errors.Add("Reached the search limit!");
+                    return path;
+                }
+
                 var neighbors = grid.Neighbors(parentNode.X, parentNode.Y);
                 foreach (var neighbor in neighbors)
                 {
@@ -57,10 +76,25 @@ namespace GridPath
 
                     if(moveWasDiagonal)
                     {
-                        if(!grid.AllowCutCorners)
+                        if(grid.DiagonalSetting == GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting)
                         {
                             // If we dont allow cutting corners and this is a corner cut, skip this node,
                             // as it cannot be traversed from this position
+                            var foundCornerCut = false;
+                            foreach(var offset in grid.DiagonalOffsets)
+                            {
+                                // If this is the correct offset, and either of its orthogonal offsets are not walkable
+                                // skip this node as we are cutting a corner to walk here
+                                if(parentNode.X + offset.x == neighborNode.X && parentNode.Y + offset.y == neighborNode.Y && (!grid.NodeAt(parentNode.X + offset.x, parentNode.Y).Walkable || !grid.NodeAt(parentNode.X, parentNode.Y + offset.y).Walkable))
+                                {
+                                    foundCornerCut = true;
+                                    break; // break offset loop
+                                }
+                            }
+                            if(foundCornerCut)
+                            {
+                                continue; // skip this node
+                            }
                         }
                         newGValueForPath += _diagonal_weight;
                     }
