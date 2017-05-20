@@ -7,9 +7,9 @@ using Point = GridPath.Point;
 public class TilePopulator : MonoBehaviour
 {
     public Mesh Mesh;
-    public GameObject FloorTile1;
-    public GameObject FloorTile2;
-    public GameObject CollidableTile1;
+    public GameObject LightTile;
+    public GameObject DarkTile;
+    public GameObject CollidableTile;
     public GameObject SeekerPrefab;
     public GameObject TargetPrefab;
     public int GridSizeX;
@@ -82,18 +82,18 @@ public class TilePopulator : MonoBehaviour
                 Vector3 drawLocation = IsoUtil.CartesianToIso(x, y, IsoUtil.IsoType.TILE);
                 if (Random.Range(0, 5) == 4)
                 {
-                    var go = GameObject.Instantiate(CollidableTile1, drawLocation, Quaternion.identity);
+                    var go = GameObject.Instantiate(CollidableTile, drawLocation, Quaternion.identity);
                     setIsoPosition(go, x, y);
                     pathFinder.Grid.SetWalkable(x, y, false);
                 }
                 else if ((x % 2 == 0 && y % 2 == 0) || x % 2 == 1 && y % 2 == 1)
                 {
-                    var go = GameObject.Instantiate(FloorTile2, drawLocation, Quaternion.identity);
+                    var go = GameObject.Instantiate(DarkTile, drawLocation, Quaternion.identity);
                     setIsoPosition(go, x, y);
                 }
                 else
                 {
-                    var go = GameObject.Instantiate(FloorTile1, drawLocation, Quaternion.identity);
+                    var go = GameObject.Instantiate(LightTile, drawLocation, Quaternion.identity);
                     setIsoPosition(go, x, y);
                 }
             }

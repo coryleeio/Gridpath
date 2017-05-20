@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GridPath
 {
-    public class PathSolver : IPathSolver
+    public class PathSolver
     {
         private static readonly int _max_open_nodes = 2000;
         private static readonly int _orthogonal_weight = 10;

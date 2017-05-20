@@ -1,5 +1,4 @@
 ﻿using Assets;
-using Assets.GridPath;
 using GridPath;
 using System.Collections;
 using UnityEngine;

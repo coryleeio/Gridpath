@@ -11,21 +11,28 @@ namespace GridPath
 {
     public class PathFinder : Singleton<PathFinder>
     {
-        private class PathRequest
+
+        public enum LogLevel
         {
-            public int StartX;
-            public int StartY;
-            public int EndX;
-            public int EndY;
-            public Path Path = null;
-            public OnPathComplete Handler;
-            public TimeSpan TimeToFind;
+            DEBUG,
+            OFF
         }
 
-        public bool ShowGraph;
+        public enum GizmoLevel
+        {
+            SHOW_GRID,
+            OFF
+        }
+
+        private bool _threadsRunning;
+        private List<Thread> _threads = new List<Thread>();
+        public LogLevel PathLogging;
+        public GizmoLevel DebugMode;
+        public int NumberOfThreads;
         private ConcurrentQueue<PathRequest> _incompletePaths = new ConcurrentQueue<PathRequest>();
         private ConcurrentQueue<PathRequest> _completePaths = new ConcurrentQueue<PathRequest>();
         private List<PathRequest> _previouslyCompletedPaths = new List<PathRequest>();
+
         private GridGraph _grid;
         public GridGraph Grid
         {
@@ -39,19 +46,34 @@ namespace GridPath
             }
         }
 
-        private bool _threadsRunning;
-        private List<Thread> _threads = new List<Thread>();
-        public int NumberOfThreads;
+        private void Log(String log)
+        {
+            if (PathLogging == LogLevel.DEBUG)
+            {
+                Debug.Log(log);
+            }
+        }
+
+        private void LogCompletedRequest(PathRequest request)
+        {
+            if(PathLogging == LogLevel.DEBUG)
+            {
+                var min = request.TimeToFind.Minutes;
+                var sec = request.TimeToFind.Seconds;
+                var milli = request.TimeToFind.Milliseconds;
+                Debug.Log(string.Format("Completed path {0},{1} -> {2},{3} in: {4}m:{5}s.{6}", request.StartX, request.StartY, request.EndX, request.EndY, min, sec, milli));
+            }
+        }
 
         void Start()
         {
-            if(NumberOfThreads == 0)
+            if (NumberOfThreads == 0)
             {
                 Debug.LogWarning("Number of threads for pathfinder set to 1, as it does not support running in the main thread.");
                 NumberOfThreads = 1; // Must spawn atleast one.
             }
             _threads.Add(new Thread(PathingWorker));
-            foreach(var thread in _threads)
+            foreach (var thread in _threads)
             {
                 thread.Start();
             }
@@ -59,13 +81,14 @@ namespace GridPath
 
         void Update()
         {
-            while(_completePaths.Count > 0)
+            while (_completePaths.Count > 0)
             {
                 // call completed path handlers in the main unity thread
                 PathRequest completedRequest;
                 _completePaths.TryDequeue(out completedRequest);
-                if(completedRequest != null)
+                if (completedRequest != null)
                 {
+                    LogCompletedRequest(completedRequest);
                     completedRequest.Handler(completedRequest.Path);
                     _previouslyCompletedPaths.Add(completedRequest);
                 }
@@ -74,7 +97,7 @@ namespace GridPath
 
         void PathingWorker()
         {
-            IPathSolver solver = new PathSolver();
+            PathSolver solver = new PathSolver();
             Stopwatch watch = new Stopwatch();
             _threadsRunning = true;
             bool workDone = false;
@@ -84,19 +107,13 @@ namespace GridPath
             {
                 PathRequest incompletePath;
                 _incompletePaths.TryDequeue(out incompletePath);
-                if(incompletePath != null)
+                if (incompletePath != null)
                 {
                     watch.Reset(); ;
                     watch.Start();
                     incompletePath.Path = solver.FindPath(incompletePath.StartX, incompletePath.StartY, incompletePath.EndX, incompletePath.EndY, Grid);
                     watch.Stop();
-
                     incompletePath.TimeToFind = watch.Elapsed;
-
-                    var min = incompletePath.TimeToFind.Minutes;
-                    var sec = incompletePath.TimeToFind.Seconds;
-                    var milli = incompletePath.TimeToFind.Milliseconds;
-                    //UnityEngine.Debug.Log(string.Format("Completed path {0},{1} -> {2},{3} in: {4}m:{5}s.{6}", incompletePath.StartX, incompletePath.StartY, incompletePath.EndX, incompletePath.EndY, min,sec,milli));
                     _completePaths.Enqueue(incompletePath);
                 }
             }
@@ -112,7 +129,7 @@ namespace GridPath
                 // This forces the while loop in the ThreadedWork function to abort.
                 _threadsRunning = false;
 
-                foreach(var thread in _threads)
+                foreach (var thread in _threads)
                 {
                     thread.Join();
                 }
@@ -137,7 +154,7 @@ namespace GridPath
 
         public void StartPath(int startX, int startY, int endX, int endY, OnPathComplete handler)
         {
-            UnityEngine.Debug.Log("started path!");
+            Log("started path!");
             _incompletePaths.Enqueue(new PathRequest()
             {
                 StartX = startX,
@@ -163,9 +180,9 @@ namespace GridPath
             Gizmos.DrawLine(FlipForDrawing(x + 0.5f, y + 0.5f), FlipForDrawing(x - 0.5f, y - 0.5f));
         }
 
-        void OnDrawGizmosSelected()
+        void OnDrawGizmos()
         {
-            if (Grid != null && ShowGraph)
+            if (Grid != null && DebugMode == GizmoLevel.SHOW_GRID)
             {
                 var sizeX = Grid.SizeX;
                 var sizeY = Grid.SizeY;
@@ -183,7 +200,7 @@ namespace GridPath
 
                 if (_previouslyCompletedPaths != null && _previouslyCompletedPaths.Count > 0)
                 {
-                    foreach(var pathRequest in _previouslyCompletedPaths)
+                    foreach (var pathRequest in _previouslyCompletedPaths)
                     {
                         var path = pathRequest.Path;
                         if (path.Nodes.Count > 0)
@@ -202,7 +219,7 @@ namespace GridPath
                             }
                             if (nextNode != null)
                             {
-                                if(pathRequest.TimeToFind.TotalSeconds < 1.0d)
+                                if (pathRequest.TimeToFind.TotalSeconds < 1.0d)
                                 {
                                     Gizmos.color = Color.green;
                                 }
@@ -221,5 +238,17 @@ namespace GridPath
                 }
             }
         }
+
+        private class PathRequest
+        {
+            public int StartX;
+            public int StartY;
+            public int EndX;
+            public int EndY;
+            public Path Path = null;
+            public OnPathComplete Handler;
+            public TimeSpan TimeToFind;
+        }
     }
+
 }

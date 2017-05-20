@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114794684402448440}
   - component: {fileID: 114329575852162104}
   m_Layer: 0
-  m_Name: Spawner
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,7 +87,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e46b103bf66787f45b03744fc4fd2ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGraph: 1
+  PathLogging: 0
+  DebugMode: 0
+  NumberOfThreads: 4
 --- !u!114 &114794684402448440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -100,15 +102,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  FloorTile1: {fileID: 1189396434177744, guid: 2be6c287a4b268047a46ba03ce55129e, type: 2}
-  FloorTile2: {fileID: 1337699412069888, guid: bd9e1722976a1d441b1c75cfbe643e40, type: 2}
-  CollidableTile1: {fileID: 1315587931281370, guid: 31422479875c8cb4caef643cc6e6483c,
+  LightTile: {fileID: 1337699412069888, guid: bd9e1722976a1d441b1c75cfbe643e40, type: 2}
+  DarkTile: {fileID: 1189396434177744, guid: 2be6c287a4b268047a46ba03ce55129e, type: 2}
+  CollidableTile: {fileID: 1315587931281370, guid: 31422479875c8cb4caef643cc6e6483c,
     type: 2}
   SeekerPrefab: {fileID: 1639056599900266, guid: 3a5565f02c3851542b8efc7238110101,
     type: 2}
   TargetPrefab: {fileID: 1314881867981382, guid: 4c0b3ce0adffa8541a960046fe348253,
     type: 2}
-  GridSizeX: 50
-  GridSizeY: 50
-  NumberOfSeekers: 10
-  Seed: 1
+  GridSizeX: 100
+  GridSizeY: 100
+  NumberOfSeekers: 50
+  Seed: 42
