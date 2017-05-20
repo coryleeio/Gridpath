@@ -11,7 +11,6 @@ namespace GridPath
 {
     public class PathFinder : Singleton<PathFinder>
     {
-
         public enum LogLevel
         {
             DEBUG,
@@ -29,9 +28,10 @@ namespace GridPath
         public LogLevel PathLogging;
         public GizmoLevel DebugMode;
         public int NumberOfThreads;
+        private int _numberOfPathsToDrawInDebug = 50;
         private ConcurrentQueue<PathRequest> _incompletePaths = new ConcurrentQueue<PathRequest>();
         private ConcurrentQueue<PathRequest> _completePaths = new ConcurrentQueue<PathRequest>();
-        private List<PathRequest> _previouslyCompletedPaths = new List<PathRequest>();
+        private Stack<PathRequest> _previouslyCompletedPaths = new Stack<PathRequest>();
 
         private GridGraph _grid;
         public GridGraph Grid
@@ -90,7 +90,11 @@ namespace GridPath
                 {
                     LogCompletedRequest(completedRequest);
                     completedRequest.Handler(completedRequest.Path);
-                    _previouslyCompletedPaths.Add(completedRequest);
+                    if(_previouslyCompletedPaths.Count > _numberOfPathsToDrawInDebug)
+                    {
+                        _previouslyCompletedPaths.Pop();
+                    }
+                    _previouslyCompletedPaths.Push(completedRequest);
                 }
             }
         }
@@ -173,6 +177,7 @@ namespace GridPath
             Gizmos.DrawLine(FlipForDrawing(x + 0.5f, y - 0.5f), FlipForDrawing(x - 0.5f, y - 0.5f));
             Gizmos.DrawLine(FlipForDrawing(x - 0.5f, y - 0.5f), FlipForDrawing(x - 0.5f, y + 0.5f));
         }
+
         private void DrawX(float x, float y)
         {
             Gizmos.color = Color.blue;
@@ -191,7 +196,7 @@ namespace GridPath
                     for (var x = 0; x < sizeX; x++)
                     {
                         DrawSquare(x, y);
-                        if (!Grid.NodeAt(x, y).walkable)
+                        if (!Grid.NodeAt(x, y).Walkable)
                         {
                             DrawX(x, y);
                         }
@@ -219,18 +224,7 @@ namespace GridPath
                             }
                             if (nextNode != null)
                             {
-                                if (pathRequest.TimeToFind.TotalSeconds < 1.0d)
-                                {
-                                    Gizmos.color = Color.green;
-                                }
-                                else if (pathRequest.TimeToFind.TotalSeconds < 3.0d)
-                                {
-                                    Gizmos.color = Color.yellow;
-                                }
-                                else
-                                {
-                                    Gizmos.color = Color.red;
-                                }
+                                Gizmos.color = Color.green;
                                 Gizmos.DrawLine(FlipForDrawing(node.X, node.Y), FlipForDrawing(nextNode.X, nextNode.Y));
                             }
                         }

@@ -30,7 +30,6 @@ namespace GridPath
             set
             {
                 _allowCutCorners = value;
-                CalculateAllNeighbors(SizeX, SizeY);
             }
         }
 
@@ -105,7 +104,7 @@ namespace GridPath
 
         public List<GraphNode> Neighbors(int x, int y)
         {
-            return NodeAt(x, y).neighbors;
+            return NodeAt(x, y).Neighbors;
         }
 
         private void CalculateAllNeighbors(int sizeX, int sizeY)
@@ -135,14 +134,14 @@ namespace GridPath
             {
                 for (var y = 0; y < sizeY; y++)
                 {
-                    NodeAt(x, y).neighbors.Clear();
+                    NodeAt(x, y).Neighbors.Clear();
                     foreach (var offset in neighborOffsets)
                     {
                         var neighborX = x + offset.x;
                         var neighborY = y + offset.y;
                         if (NodeInGrid(neighborX, neighborY))
                         {
-                            NodeAt(x, y).neighbors.Add(NodeAt(neighborX, neighborY));
+                            NodeAt(x, y).Neighbors.Add(NodeAt(neighborX, neighborY));
                         }
                     }
                 }
@@ -153,7 +152,7 @@ namespace GridPath
         {
             if(NodeInGrid(x, y))
             {
-                _grid[x, y].walkable = walkable;
+                _grid[x, y].Walkable = walkable;
             }
             else
             {
@@ -165,7 +164,7 @@ namespace GridPath
         {
             if (NodeInGrid(x, y))
             {
-                _grid[x, y].weight = weight;
+                _grid[x, y].Weight = weight;
             }
             else
             {

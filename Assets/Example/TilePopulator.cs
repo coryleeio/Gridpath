@@ -20,7 +20,7 @@ public class TilePopulator : MonoBehaviour
 
     void Start()
     {
-        Random.seed = Seed;
+        Random.InitState(Seed);
         BuildMap();
         SpawnTarget();
         SpawnSeekers();
@@ -34,7 +34,7 @@ public class TilePopulator : MonoBehaviour
             var x = Random.Range(0, GridSizeX);
             var y = Random.Range(0, GridSizeY);
             var node = PathFinder.Instance.Grid.NodeAt(x, y);
-            if (node.walkable)
+            if (node.Walkable)
             {
                 hasFound = true;
                 return new Point(x, y);
@@ -46,9 +46,9 @@ public class TilePopulator : MonoBehaviour
     public void SpawnTarget()
     {
         var point = FindWalkable();
-        var isoPosition = IsoUtil.CartesianToIso(point.x, point.y, IsoUtil.IsoType.FLOOR);
+        var isoPosition = IsometricDrawUtility.CartesianToIsometricDraw(point.x, point.y, IsometricDrawUtility.DrawType.FLOOR);
         Target = Instantiate(TargetPrefab, isoPosition, Quaternion.identity);
-        setIsoPosition(Target, point.x, point.y);
+        SetCartesianPosition(Target, point.x, point.y);
     }
 
     public void SpawnSeekers()
@@ -56,19 +56,19 @@ public class TilePopulator : MonoBehaviour
         for(var i = 0; i < NumberOfSeekers; i++)
         {
             var point = FindWalkable();
-            var isoPosition = IsoUtil.CartesianToIso(point.x, point.y,IsoUtil.IsoType.FLOOR);
+            var isoPosition = IsometricDrawUtility.CartesianToIsometricDraw(point.x, point.y,IsometricDrawUtility.DrawType.FLOOR);
             var go = Instantiate(SeekerPrefab, isoPosition, Quaternion.identity);
-            setIsoPosition(go, point.x,point.y);
+            SetCartesianPosition(go, point.x,point.y);
             var seekAI = go.GetComponent<SeekAI>();
             seekAI.Seek(Target.transform);
         }
     }
 
-    public void setIsoPosition(GameObject ob, int x, int y)
+    public void SetCartesianPosition(GameObject ob, int x, int y)
     {
-        var iso = ob.GetComponent<IsoObj>();
-        iso.X = x;
-        iso.Y = y;
+        var pos = ob.GetComponent<CartesianPosition>();
+        pos.X = x;
+        pos.Y = y;
     }
 
     private void BuildMap()
@@ -79,22 +79,22 @@ public class TilePopulator : MonoBehaviour
         {
             for (int y = 0; y < GridSizeY; y++)
             {
-                Vector3 drawLocation = IsoUtil.CartesianToIso(x, y, IsoUtil.IsoType.TILE);
+                Vector3 drawLocation = IsometricDrawUtility.CartesianToIsometricDraw(x, y, IsometricDrawUtility.DrawType.TILE);
                 if (Random.Range(0, 5) == 4)
                 {
                     var go = GameObject.Instantiate(CollidableTile, drawLocation, Quaternion.identity);
-                    setIsoPosition(go, x, y);
+                    SetCartesianPosition(go, x, y);
                     pathFinder.Grid.SetWalkable(x, y, false);
                 }
                 else if ((x % 2 == 0 && y % 2 == 0) || x % 2 == 1 && y % 2 == 1)
                 {
                     var go = GameObject.Instantiate(DarkTile, drawLocation, Quaternion.identity);
-                    setIsoPosition(go, x, y);
+                    SetCartesianPosition(go, x, y);
                 }
                 else
                 {
                     var go = GameObject.Instantiate(LightTile, drawLocation, Quaternion.identity);
-                    setIsoPosition(go, x, y);
+                    SetCartesianPosition(go, x, y);
                 }
             }
         }

@@ -6,18 +6,16 @@ namespace GridPath
     {
         public int X;
         public int Y;
-        public bool walkable = true;
-        public int weight = 0;
-        public List<GraphNode> neighbors;
+        public bool Walkable = true;
+        public int Weight = 0;
+        public List<GraphNode> Neighbors;
 
         private GraphNode()
-        {
-
-        }
+        {}
 
         public GraphNode(int numNeighbors)
         {
-            neighbors = new List<GraphNode>(numNeighbors);
+            Neighbors = new List<GraphNode>(numNeighbors);
         }
     }
 }
