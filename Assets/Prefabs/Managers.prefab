@@ -105,6 +105,8 @@ MonoBehaviour:
   DarkTile: {fileID: 1189396434177744, guid: 2be6c287a4b268047a46ba03ce55129e, type: 2}
   CollidableTile: {fileID: 1315587931281370, guid: 31422479875c8cb4caef643cc6e6483c,
     type: 2}
+  TallCollidable: {fileID: 1776582691286854, guid: d71130943ef1f174bb304f416b5dcde0,
+    type: 2}
   SeekerPrefab: {fileID: 1639056599900266, guid: 3a5565f02c3851542b8efc7238110101,
     type: 2}
   TargetPrefab: {fileID: 1314881867981382, guid: 4c0b3ce0adffa8541a960046fe348253,

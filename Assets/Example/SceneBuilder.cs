@@ -10,6 +10,7 @@ public class SceneBuilder : MonoBehaviour
     public GameObject LightTile;
     public GameObject DarkTile;
     public GameObject CollidableTile;
+    public GameObject TallCollidable;
     public GameObject SeekerPrefab;
     public GameObject TargetPrefab;
     public int GridSizeX;
@@ -89,9 +90,17 @@ public class SceneBuilder : MonoBehaviour
             for (int y = 0; y < GridSizeY; y++)
             {
                 Vector3 drawLocation = IsometricDrawUtility.CartesianToIsometricDraw(x, y, IsometricDrawUtility.DrawType.TILE);
-                if (Random.Range(0, 5) == 4)
+                var random = Random.Range(0, 10);
+                if (random == 5)
                 {
                     var go = GameObject.Instantiate(CollidableTile, drawLocation, Quaternion.identity);
+                    SetCartesianPosition(go, x, y);
+                    pathFinder.Grid.SetWalkable(x, y, false);
+                    AddToMapFolder(go);
+                }
+                else if(random == 4)
+                {
+                    var go = GameObject.Instantiate(TallCollidable, drawLocation, Quaternion.identity);
                     SetCartesianPosition(go, x, y);
                     pathFinder.Grid.SetWalkable(x, y, false);
                     AddToMapFolder(go);
