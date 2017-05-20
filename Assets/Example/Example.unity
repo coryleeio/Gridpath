@@ -176,6 +176,26 @@ Prefab:
       propertyPath: m_Name
       value: Managers
       objectReference: {fileID: 0}
+    - target: {fileID: 114329575852162104, guid: 40c7d2acb4db30348abd9f0fcaef79bf,
+        type: 2}
+      propertyPath: NumberOfThreads
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794684402448440, guid: 40c7d2acb4db30348abd9f0fcaef79bf,
+        type: 2}
+      propertyPath: GridSizeX
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794684402448440, guid: 40c7d2acb4db30348abd9f0fcaef79bf,
+        type: 2}
+      propertyPath: GridSizeY
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114794684402448440, guid: 40c7d2acb4db30348abd9f0fcaef79bf,
+        type: 2}
+      propertyPath: NumberOfSeekers
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 40c7d2acb4db30348abd9f0fcaef79bf, type: 2}
   m_IsPrefabParent: 0

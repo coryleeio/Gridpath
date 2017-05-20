@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System;
 using GridPath.DotNetConcurrency;
+using Debug = UnityEngine.Debug;
 
 namespace GridPath
 {
@@ -38,13 +39,22 @@ namespace GridPath
             }
         }
 
-        bool _threadRunning;
-        Thread _thread;
+        private bool _threadsRunning;
+        private List<Thread> _threads = new List<Thread>();
+        public int NumberOfThreads;
 
         void Start()
         {
-            _thread = new Thread(PathingWorker);
-            _thread.Start();
+            if(NumberOfThreads == 0)
+            {
+                Debug.LogWarning("Number of threads for pathfinder set to 1, as it does not support running in the main thread.");
+                NumberOfThreads = 1; // Must spawn atleast one.
+            }
+            _threads.Add(new Thread(PathingWorker));
+            foreach(var thread in _threads)
+            {
+                thread.Start();
+            }
         }
 
         void Update()
@@ -66,11 +76,11 @@ namespace GridPath
         {
             IPathSolver solver = new PathSolver();
             Stopwatch watch = new Stopwatch();
-            _threadRunning = true;
+            _threadsRunning = true;
             bool workDone = false;
 
             // This pattern lets us interrupt the work at a safe point if neeeded.
-            while (_threadRunning && !workDone)
+            while (_threadsRunning && !workDone)
             {
                 PathRequest incompletePath;
                 _incompletePaths.TryDequeue(out incompletePath);
@@ -86,25 +96,28 @@ namespace GridPath
                     var min = incompletePath.TimeToFind.Minutes;
                     var sec = incompletePath.TimeToFind.Seconds;
                     var milli = incompletePath.TimeToFind.Milliseconds;
-                    UnityEngine.Debug.Log(string.Format("Completed path {0},{1} -> {2},{3} in: {4}m:{5}s.{6}", incompletePath.StartX, incompletePath.StartY, incompletePath.EndX, incompletePath.EndY, min,sec,milli));
+                    //UnityEngine.Debug.Log(string.Format("Completed path {0},{1} -> {2},{3} in: {4}m:{5}s.{6}", incompletePath.StartX, incompletePath.StartY, incompletePath.EndX, incompletePath.EndY, min,sec,milli));
                     _completePaths.Enqueue(incompletePath);
                 }
             }
-            _threadRunning = false;
+            _threadsRunning = false;
         }
 
         void OnDisable()
         {
             // If the thread is still running, we should shut it down,
             // otherwise it can prevent the game from exiting correctly.
-            if (_threadRunning)
+            if (_threadsRunning)
             {
                 // This forces the while loop in the ThreadedWork function to abort.
-                _threadRunning = false;
+                _threadsRunning = false;
 
+                foreach(var thread in _threads)
+                {
+                    thread.Join();
+                }
                 // This waits until the thread exits,
                 // ensuring any cleanup we do after this is safe. 
-                _thread.Join();
             }
 
             // Thread is guaranteed no longer running. 
