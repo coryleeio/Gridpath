@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Game.Scenes
+namespace Assets.GridPath.Example
 {
     public class CamDriver : MonoBehaviour
     {
