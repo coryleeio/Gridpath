@@ -9,6 +9,7 @@ using Debug = UnityEngine.Debug;
 
 namespace GridPath
 {
+    [AddComponentMenu("GridPath/PathFinder")]
     public class PathFinder : Singleton<PathFinder>
     {
         public enum LogLevel

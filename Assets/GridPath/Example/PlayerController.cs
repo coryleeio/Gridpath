@@ -34,8 +34,8 @@ namespace Assets.GridPath.Example
 
             _mousePositionInScreenCoordinates = IsometricMath.GetMousePositionInScreenCoordinates();
             _mousePositionInWorldCoordinates = IsometricMath.GetMousePositionInWorldCoordinates(_camera);
-            _cellCoordinates = IsometricMath.GetMousePositionInCartesianCoordinates(_camera);
-            _centerOfCellPosition = IsometricMath.CartesianToIso(_cellCoordinates.x, _cellCoordinates.y, IsometricMath.DrawType.FLOOR);
+            _cellCoordinates = IsometricMath.GetMousePositionOnMap(_camera);
+            _centerOfCellPosition = IsometricMath.MapToWorld(_cellCoordinates.x, _cellCoordinates.y, IsometricMath.DrawType.FLOOR);
 
             if (Input.GetButton("Fire1"))
             {

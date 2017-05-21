@@ -2,6 +2,7 @@
 
 namespace Assets.GridPath.Example
 {
+    [AddComponentMenu("GridPath/Example/CartesianPosition")]
     public class CartesianPosition : MonoBehaviour
     {
         public IsometricMath.DrawType DrawPosition;
@@ -36,7 +37,7 @@ namespace Assets.GridPath.Example
 
         private void UpdateDrawPosition(int newX, int newY)
         {
-            transform.position = IsometricMath.CartesianToIso(newX, newY, DrawPosition);
+            transform.position = IsometricMath.MapToWorld(newX, newY, DrawPosition);
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Assets.GridPath.Example
 {
     [RequireComponent(typeof(CartesianPosition))]
+    [AddComponentMenu("GridPath/Example/SeekAI")]
     public class SeekAI : MonoBehaviour
     {
         private Path _path;

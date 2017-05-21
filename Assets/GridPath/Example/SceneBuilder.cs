@@ -6,6 +6,7 @@ namespace Assets.GridPath.Example
 {
 
     [RequireComponent(typeof(PathFinder))]
+    [AddComponentMenu("GridPath/Example/SceneBuilder")]
     public class SceneBuilder : MonoBehaviour
     {
         public Mesh Mesh;
@@ -51,7 +52,7 @@ namespace Assets.GridPath.Example
         public void SpawnTarget()
         {
             var point = FindWalkable();
-            var isoPosition = IsometricMath.CartesianToIso(point.x, point.y, IsometricMath.DrawType.FLOOR);
+            var isoPosition = IsometricMath.MapToWorld(point.x, point.y, IsometricMath.DrawType.FLOOR);
             Target = Instantiate(TargetPrefab, isoPosition, Quaternion.identity);
             SetCartesianPosition(Target, point.x, point.y);
         }
@@ -61,7 +62,7 @@ namespace Assets.GridPath.Example
             for (var i = 0; i < NumberOfSeekers; i++)
             {
                 var point = FindWalkable();
-                var isoPosition = IsometricMath.CartesianToIso(point.x, point.y, IsometricMath.DrawType.FLOOR);
+                var isoPosition = IsometricMath.MapToWorld(point.x, point.y, IsometricMath.DrawType.FLOOR);
                 var go = Instantiate(SeekerPrefab, isoPosition, Quaternion.identity);
                 SetCartesianPosition(go, point.x, point.y);
                 var seekAI = go.GetComponent<SeekAI>();
@@ -89,7 +90,7 @@ namespace Assets.GridPath.Example
             {
                 for (int y = 0; y < GridSizeY; y++)
                 {
-                    Vector3 drawLocation = IsometricMath.CartesianToIso(x, y, IsometricMath.DrawType.TILE);
+                    Vector3 drawLocation = IsometricMath.MapToWorld(x, y, IsometricMath.DrawType.TILE);
                     var random = Random.Range(0, 10);
                     if (random == 5)
                     {

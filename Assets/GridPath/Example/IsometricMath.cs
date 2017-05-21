@@ -17,12 +17,12 @@ namespace Assets.GridPath.Example
         public static float HalfTileWidth = TileWidth / 2.0f;
         public static float HalfTileHeight = TileHeight / 2.0f;
 
-        public static Vector3 CartesianToIso(int x, int y, DrawType mode)
+        public static Vector3 MapToWorld(int x, int y, DrawType mode)
         {
-            return CartesianToIso(x * 1.0f, y * 1.0f, mode);
+            return MapToWorld(x * 1.0f, y * 1.0f, mode);
         }
 
-        public static Vector3 CartesianToIso(float x, float y, DrawType mode)
+        public static Vector3 MapToWorld(float x, float y, DrawType mode)
         {
             var newX = (x - y) * HalfTileWidth;
             var newY = (-x - y) * HalfTileHeight;
@@ -41,7 +41,7 @@ namespace Assets.GridPath.Example
             return new Vector3(newX, newY, newZ);
         }
 
-        public static Point IsoToCartesian(Vector3 v)
+        public static Point WorldToMap(Vector3 v)
         {
             var isoX = v.x;
             var isoY = v.y;
@@ -57,7 +57,7 @@ namespace Assets.GridPath.Example
             return Input.mousePosition;
         }
 
-        public static Vector3 ScreenToWorldPosition(Camera camera, Vector3 screenCoordinates)
+        private static Vector3 ScreenToWorld(Camera camera, Vector3 screenCoordinates)
         {
             var ray = camera.ScreenPointToRay(screenCoordinates);
             // create a plane at 0,0,0 whose normal points to +Y:
@@ -72,25 +72,15 @@ namespace Assets.GridPath.Example
             return Vector3.zero;
         }
 
-        public static Rect WorldSpaceCullingBox(Camera camera)
-        {
-            var botLeft = ScreenToWorldPosition(camera, new Vector3(0.0f, 0.0f, 0.0f));
-            var topRight = ScreenToWorldPosition(camera, new Vector3(Screen.width, Screen.height, 0.0f));
-            var width = Mathf.FloorToInt(Mathf.Abs(topRight.x - botLeft.x));
-            var height = Mathf.FloorToInt(Mathf.Abs(topRight.y - botLeft.y));
-            var box = new Rect(Mathf.FloorToInt(botLeft.x - 4), Mathf.FloorToInt(botLeft.y + height + 4), width + 8, height + 8);
-            return box;
-        }
-
         public static Vector3 GetMousePositionInWorldCoordinates(Camera camera)
         {
-            return ScreenToWorldPosition(camera, GetMousePositionInScreenCoordinates());
+            return ScreenToWorld(camera, GetMousePositionInScreenCoordinates());
         }
 
-        public static Point GetMousePositionInCartesianCoordinates(Camera camera)
+        public static Point GetMousePositionOnMap(Camera camera)
         {
             var v = GetMousePositionInWorldCoordinates(camera);
-            return IsoToCartesian(v);
+            return WorldToMap(v);
         }
     }
 }
