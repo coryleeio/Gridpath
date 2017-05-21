@@ -115,4 +115,3 @@ MonoBehaviour:
   GridSizeY: 40
   NumberOfSeekers: 15
   Diagonals: 0
-  Seed: 42

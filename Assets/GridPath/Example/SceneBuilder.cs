@@ -19,7 +19,6 @@ namespace Assets.GridPath.Example
         public int GridSizeY;
         public int NumberOfSeekers;
         public GridGraph.DiagonalOptions Diagonals;
-        public int Seed;
         private GameObject Target;
         private GameObject MapFolder;
 
@@ -27,7 +26,6 @@ namespace Assets.GridPath.Example
         {
             MapFolder = new GameObject();
             MapFolder.name = "Map";
-            Random.InitState(Seed);
             BuildMap();
             SpawnTarget();
             SpawnSeekers();
