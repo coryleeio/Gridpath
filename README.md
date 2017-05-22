@@ -1,11 +1,12 @@
 ﻿# Gridpath
 
-Gridpath is a MIT licensed multithreaded 2D implementation of A* aimed at 2D games with just an X,Y axis in Unity3D. It is meant to be small, simple enough that you could modify yourself, and 2D centric.  It is reasonably fast, and not a ton of code.  It also includes a visual debugger, and an example scene containing most of the math needed to setup an isometric scene in Unity3D.
+Gridpath is a MIT licensed multithreaded 2D implementation of A* aimed at 2D games with just an X,Y axis in Unity3D. It is meant to be small, simple enough that you could modify yourself, and 2D centric.  It is reasonably fast and not a ton of code.  It also includes a visual debugger and an example scene containing most of the math needed to setup an isometric scene in Unity3D.
 
 There is a working example in the project in the Example folder:
-![link to demo](Assets/GridPath/Example/demo.png)
+![link to demo](Example/demo.png)
 
 A couple of notes about the demo
+- Set unity to 2D mode
 - Click the mouse anywhere to place the target, the seeker cubes will move toward the target at all times, if you place it somewhere they cant reach, they will stop moving until you move the target to somewhere they can reach again, you cannot place the target off the grid.
 - The coordinates of the grid in the demo and the grid correspond with the painters algorithm, in that the topmost square is 0,0, and the bottomRight most node is maxSizeX, maxSizeY.
 - It is a bit slow because it is using native culling with sprite renderers for each tile, you'd be better of drawing them manually in your game and only drawing the stuff on the screen
@@ -18,10 +19,10 @@ A couple of notes about the demo
   - Access the pathfinder somewhere in the scene and configure the grid like so:
 
 
-       Pathfinder.Instance.Init(20, 20, GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting, 4);
+    Pathfinder.Instance.Init(20, 20, GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting, 4);
     
     
-this will create a 20,20 grid with 4 threads,allowing diagonals, but not allowing the entities to cut corners.  For diagonals several options are supported, they are: 
+This will create a 20,20 grid with 4 threads, allowing diagonals, but not allowing the entities to cut corners.  For diagonals several options are supported, they are: 
 
 - DiagonalsWithoutCornerCutting - diagonals allowed, cutting corners is not
 - NoDiagonals - no diagonals allowed, only orthogonal movement will be attempted
@@ -110,13 +111,16 @@ Astute readers may not that the basic API calls bear some semblance to
 ### Special Thanks
 
 [Clint Bellanger's artice on isometic math](http://clintbellanger.net/articles/isometric_math)
+
 [Patrick Lester article on A* pathfinding](http://www.policyalmanac.org/games/aStarTutorial.htm)
+
 [Amit Pattel's reference on A*](http://www-cs-students.stanford.edu/~amitp/gameprog.html#Paths)
+
 [BlueRaja Concurrent min-Priority Queue implementation](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp)
 
 ### License
     
-    MIT license, see [License](License.md)
+    MIT license, see License.md
 
 ### Contact
 
@@ -124,6 +128,8 @@ email:
 corymichaellee at gmail.com
 
 [Twitter](https://twitter.com/coryleeio)
+
 [My blog](http://corylee.io)
+
 [Github](https://github.com/coryleeio)
 
