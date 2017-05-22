@@ -1,7 +1,7 @@
-﻿using GridPath;
+﻿using Gridpath;
 using UnityEngine;
 
-namespace Assets.GridPath.Example
+namespace GridPath.Example
 {
     public class PlayerController : MonoBehaviour
     {
@@ -55,7 +55,8 @@ namespace Assets.GridPath.Example
 
         public void OnGUI()
         {
-            GUI.Label(new UnityEngine.Rect(10, 160, 200, 40), "Click the mouse to place the target at the location.");
+            GUI.Label(new UnityEngine.Rect(10, 120, 200, 40), "Click the mouse to place the target at the location.");
+            GUI.Label(new UnityEngine.Rect(10, 160, 200, 40), "Move the mouse to the edge of the screen to scroll.");
             GUI.Label(new UnityEngine.Rect(10, 200, 200, 40), "_mousePosition: " + _mousePositionInScreenCoordinates);
             GUI.Label(new UnityEngine.Rect(10, 240, 200, 40), "WorldPosition: " + _mousePositionInWorldCoordinates);
             GUI.Label(new UnityEngine.Rect(10, 280, 200, 40), "CellCoordinates: " + _cellCoordinates);

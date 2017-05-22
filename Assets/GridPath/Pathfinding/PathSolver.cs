@@ -1,9 +1,8 @@
 ﻿using Priority_Queue;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace GridPath
+namespace Gridpath
 {
     public class PathSolver
     {

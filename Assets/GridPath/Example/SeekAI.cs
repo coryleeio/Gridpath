@@ -1,8 +1,8 @@
-﻿using GridPath;
+﻿using Gridpath;
 using System.Collections;
 using UnityEngine;
 
-namespace Assets.GridPath.Example
+namespace GridPath.Example
 {
     [RequireComponent(typeof(CartesianPosition))]
     [AddComponentMenu("GridPath/Example/SeekAI")]

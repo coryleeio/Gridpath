@@ -1,7 +1,7 @@
-﻿using GridPath;
+﻿using Gridpath;
 using UnityEngine;
 
-namespace Assets.GridPath.Example
+namespace GridPath.Example
 {
     public static class IsometricMath
     {

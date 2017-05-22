@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.GridPath.Example
+namespace GridPath.Example
 {
     [AddComponentMenu("GridPath/Example/CartesianPosition")]
     public class CartesianPosition : MonoBehaviour

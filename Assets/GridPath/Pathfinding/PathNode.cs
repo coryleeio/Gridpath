@@ -1,7 +1,6 @@
 ﻿using Priority_Queue;
-using System;
 
-namespace GridPath
+namespace Gridpath
 {
     public class PathNode : FastPriorityQueueNode
     {

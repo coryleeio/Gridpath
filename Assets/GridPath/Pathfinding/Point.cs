@@ -1,4 +1,4 @@
-﻿namespace GridPath
+﻿namespace Gridpath
 {
     public class Point
     {

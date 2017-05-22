@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Game
+namespace Gridpath
 {
     public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {

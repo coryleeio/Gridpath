@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace GridPath
-{
+namespace Gridpath
+{ 
     public class GridGraph
     {
         private GraphNode[,] _grid;

@@ -1,4 +1,4 @@
-﻿using Assets.GridPath.Example;
+﻿using GridPath.Example;
 using UnityEditor;
 
 [CustomEditor(typeof(CartesianPosition))]

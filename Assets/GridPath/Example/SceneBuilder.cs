@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using GridPath;
-using Point = GridPath.Point;
+﻿using Gridpath;
+using UnityEngine;
 
-namespace Assets.GridPath.Example
+namespace GridPath.Example
 {
 
     [RequireComponent(typeof(PathFinder))]

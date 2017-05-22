@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-namespace Assets.GridPath.Example
+namespace GridPath.Example
 {
     public class CamDriver : MonoBehaviour
     {
-        private const int Speed = 10;
-        private const int ScrollBoundary = 25;
+        private const int Speed = 4;
+        private const int ScrollBoundary = 5;
         private float _newXCoordinate;
         private float _newYCoordinate;
         private float _newZCoordinate;

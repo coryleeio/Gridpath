@@ -87,8 +87,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e46b103bf66787f45b03744fc4fd2ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PathLogging: 1
-  DebugMode: 1
+  PathLogging: 0
+  DebugMode: 0
 --- !u!114 &114605415999156188
 MonoBehaviour:
   m_ObjectHideFlags: 1

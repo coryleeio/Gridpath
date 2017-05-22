@@ -1,5 +1,4 @@
-﻿using Assets.Game;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System;
 using GridPath.DotNetConcurrency;
 using Debug = UnityEngine.Debug;
 
-namespace GridPath
+namespace Gridpath
 {
     [AddComponentMenu("GridPath/PathFinder")]
     public class PathFinder : Singleton<PathFinder>
