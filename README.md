@@ -120,7 +120,7 @@ Astute readers may not that the basic API calls bear some semblance to
 
 ### License
     
-    MIT license, see License.md
+[MIT license](LICENSE.md)
 
 ### Contact
 
