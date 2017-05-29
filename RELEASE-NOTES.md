@@ -5,3 +5,7 @@
 - Example scene added
 - README added
 - MIT license added
+
+## v0.1.1 - May 30th, 2017
+
+- Fix no_diaognals setting not working in grid and demo

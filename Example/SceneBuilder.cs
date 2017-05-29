@@ -84,7 +84,7 @@ namespace GridPath.Example
         private void BuildMap()
         {
             var pathFinder = PathFinder.Instance;
-            pathFinder.Init(GridSizeX, GridSizeY, GridGraph.DiagonalOptions.DiagonalsWithoutCornerCutting, 4);
+            pathFinder.Init(GridSizeX, GridSizeY, Diagonals, 4);
             for (int x = 0; x < GridSizeX; x++)
             {
                 for (int y = 0; y < GridSizeY; y++)

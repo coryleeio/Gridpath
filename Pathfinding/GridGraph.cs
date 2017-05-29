@@ -137,7 +137,7 @@ namespace Gridpath
                 NeighborOffsets.Add(downLeft);
                 NeighborOffsets.Add(downRight);
             }
-            else
+            if(DiagonalSetting != DiagonalOptions.DiagonalsWithCornerCutting && DiagonalSetting != DiagonalOptions.DiagonalsWithoutCornerCutting && DiagonalSetting != DiagonalOptions.NoDiagonals)
             {
                 throw new System.Exception("Not implemented");
             }
