@@ -3,7 +3,11 @@
 Gridpath is a MIT licensed multithreaded 2D implementation of A* aimed at 2D games with just an X,Y axis in Unity3D. It is meant to be small, simple enough that you could modify yourself, and 2D centric.  It is reasonably fast and not a ton of code.  It also includes a visual debugger and an example scene containing most of the math needed to setup an isometric scene in Unity3D.
 
 There is a working example in the project in the Example folder:
-![link to demo](Example/demo.png)
+
+
+![gif of demo](Example/gridpath.gif)
+
+![image of demo](Example/demo.png)
 
 A couple of notes about the demo
 - Set unity to 2D mode
@@ -126,10 +130,6 @@ Astute readers may not that the basic API calls bear some semblance to
 
 email: 
 corymichaellee at gmail.com
-
-[Twitter](https://twitter.com/coryleeio)
-
-[My blog](http://corylee.io)
 
 [Github](https://github.com/coryleeio)
 
